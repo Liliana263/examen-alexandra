@@ -49,5 +49,16 @@ class UsuarioController {
     res.json({ message: "usuario eliminado" });
   }
 
+  async login(req, res) {
+    const { correo, contrasena } = req.body;
+    const resultado = await usuarioservices.login(correo, contrasena);
+
+    if (resultado.error) {
+      return res.status(401).json({ mensaje: resultado.error });
+    }
+
+    res.json(resultado);
+  }
+
 }
 module.exports = new UsuarioController();

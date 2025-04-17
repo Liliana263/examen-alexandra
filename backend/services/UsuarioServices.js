@@ -31,6 +31,25 @@ class UsuariosService {
     } catch (e) {
         console.log("Error en el servidor al actualizar el usuario:", e);
     }
+
+    
+}
+async login(correo, contrasena) {
+  const usuario = await Usuarios.findOne({ where: { correo } });
+
+  if (!usuario) {
+    return { error: "Correo no registrado" };
+  }
+  if (contrasena !== usuario.contrasena) {
+    return { error: "Credenciales incorrectas" };
+  }
+  const token = jwt.sign(
+    { id: usuario.id, correo: usuario.correo },
+    "secreto",
+    { expiresIn: "1h" }
+  );
+  console.log("Token generado:", token);
+  return { token, usuario };
 }
 }
 
